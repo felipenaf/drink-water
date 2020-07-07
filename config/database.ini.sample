@@ -1,0 +1,4 @@
+hostname = localhost
+database = drink_water
+username = root
+password = 123

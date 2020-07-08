@@ -1,4 +1,5 @@
 CREATE DATABASE `drink_water`;
+USE `drink_water`;
 DROP TABLE IF EXISTS `drink`;
 DROP TABLE IF EXISTS `user`;
 

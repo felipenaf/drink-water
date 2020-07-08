@@ -4,14 +4,6 @@ class ConnectionMYSQL implements ConnectionDB
 {
 	private $connection;
 
-	public function __construct() {
-		$this->getConnection();
-	}
-
-	public function closeAll() {
-		$this->connection = NULL;
-	}
-
 	public function getConnection() {
 		$dbInfo = parse_ini_file("config/database.ini");
 
@@ -20,6 +12,10 @@ class ConnectionMYSQL implements ConnectionDB
 		$this->connection->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_EMPTY_STRING);
 
 		return $this->connection;
+    }
+
+    public function closeAll() {
+		$this->connection = NULL;
 	}
 
 	private function PDOConnection($dbInfo) {

@@ -7,6 +7,13 @@ class UserModel
     private $password;
     private $name;
 
+    public function __construct($name, $email, $password)
+    {
+        $this->name = $name;
+        $this->email = $email;
+        $this->password = $password;
+    }
+
     public function getId()
     {
         return $this->id;

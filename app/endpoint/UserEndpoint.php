@@ -5,11 +5,10 @@ class UserEndpoint
     public static function getResponse($uri, $method)
     {
         $parameter = isset($uri[1]) ? $uri[1] : '';
+        $userController = new UserController();
 
         switch ($method) {
             case 'GET':
-                $userController = new UserController();
-
                 if (!empty($parameter)) {
                     if (is_numeric($parameter)) {
                         return $userController->getById($parameter);
@@ -22,14 +21,23 @@ class UserEndpoint
 
                 return null;
             break;
+
             case 'POST':
-                # When the method is POST, includes a new client
-                if(empty($route[1])){
-                    return self::doPost();
-                }else{
-                    return $arr_json = array('status' => 404);
+                if (empty($parameter)) {
+                    $entityBody = json_decode(file_get_contents('php://input'));
+
+                    if (!empty($entityBody->name) &&
+                        !empty($entityBody->email) &&
+                        !empty($entityBody->password)) {
+
+                        $user = new UserModel($entityBody->name, $entityBody->email, $entityBody->password);
+                        return $userController->save($user);
+                    }
                 }
-                break;
+
+                return null;
+            break;
+
             case 'PUT':
                 # When the method is PUT, alters an existing client
                 return self::doPut($route);

@@ -26,4 +26,21 @@ class UserRepository
 
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function save(UserModel $user)
+    {
+        $sql = 'INSERT INTO user (name, email, password) VALUES (:name, :email, :password)';
+        $stmt = $this->connection->prepare($sql);
+	    $stmt->bindValue(':name', $user->getName());
+	    $stmt->bindValue(':email', $user->getEmail());
+	    $stmt->bindValue(':password', $user->getPassword());
+	    $stmt->execute();
+
+	    if ($stmt->rowCount() > 0) {
+            $lastId = $this->connection->lastInsertId();
+			return $this->getById($lastId);
+        }
+
+        return null;
+    }
 }

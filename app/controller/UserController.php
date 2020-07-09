@@ -13,4 +13,14 @@ class UserController
     {
         return $this->userRepository->getAll();
     }
+
+    public function getById(int $id)
+    {
+        return $this->userRepository->getById($id);
+    }
+
+    public function save(UserModel $user)
+    {
+        return $this->userRepository->save($user);
+    }
 }

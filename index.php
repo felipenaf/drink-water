@@ -3,14 +3,12 @@
 define('ROOT_PATH', dirname(__FILE__));
 require_once 'vendor/autoload.php';
 
-$uc = new UserController();
-$resultado = $uc->getAll();
+$route = new Route($_SERVER['REQUEST_URI']);
+$response = $route->redirect($_SERVER['REQUEST_METHOD']);
 
-$endpoints = array('/drink-water/users', '/drink-water/drink');
-
-if (in_array($_SERVER['REQUEST_URI'], $endpoints)) {
-    var_dump($resultado);
+if ($response) {
+    echo json_encode($response);
 } else {
-    http_response_code(204);
+    http_response_code(404);
     die();
 }

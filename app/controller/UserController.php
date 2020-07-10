@@ -23,4 +23,9 @@ class UserController
     {
         return $this->userRepository->save($user);
     }
+
+    public function update(UserModel $user)
+    {
+        return $this->userRepository->update($user);
+    }
 }

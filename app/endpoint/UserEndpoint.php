@@ -45,9 +45,28 @@ class UserEndpoint
             break;
 
             case 'PUT':
-                # When the method is PUT, alters an existing client
-                return self::doPut($route);
-                break;
+                if (!empty($parameter)) {
+                    $entityBody = json_decode(file_get_contents('php://input'));
+
+                    if (is_numeric($parameter) &&
+                        (!empty($entityBody->name) &&
+                        !empty($entityBody->email) &&
+                        !empty($entityBody->password))) {
+
+                        $user = new UserModel();
+                        $user->setName($entityBody->name);
+                        $user->setEmail($entityBody->email);
+                        $user->setPassword($entityBody->password);
+                        $user->setId($parameter);
+
+                        return $userController->update($user);
+                    }
+
+                    return [null, 400];
+                }
+
+                return [null, 404];
+            break;
             case 'DELETE':
                 # When the method is DELETE, excludes an existing client.
                 return self::doDelete($route);

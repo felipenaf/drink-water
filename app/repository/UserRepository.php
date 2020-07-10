@@ -32,7 +32,7 @@ class UserRepository
 
     public function getById($id)
     {
-        $sql = 'SELECT u.id, u.name, u.email, d.milliliter, u.token FROM user u ';
+        $sql = 'SELECT u.id, u.name, u.email, d.milliliter FROM user u ';
         $sql .= 'LEFT JOIN drink d ON d.id_user = u.id ';
         $sql .= 'WHERE u.id = :id';
 
@@ -81,5 +81,28 @@ class UserRepository
 	    $stmt->bindValue(":email", $email);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function update(UserModel $user)
+    {
+        $tokenController = new TokenController();
+        $token = $tokenController->verify();
+
+        if ($token['id_user'] != $user->getId()) {
+            return [null, 401];
+        }
+
+        $sql = 'UPDATE user SET name = :name, email = :email, password = :password WHERE id = :id';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute([
+            'name' => $user->getName(),
+            'email' => $user->getEmail(),
+            'password' => $user->getPassword(),
+            'id' => $user->getId()
+        ]);
+
+        if ($stmt->rowCount()) {
+			return [null, 200];
+        }
     }
 }

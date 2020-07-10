@@ -28,4 +28,9 @@ class UserController
     {
         return $this->userRepository->update($user);
     }
+
+    public function getByIdForUpdate(int $id)
+    {
+        return $this->userRepository->getByIdForUpdate($id);
+    }
 }

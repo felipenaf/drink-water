@@ -48,18 +48,39 @@ class UserEndpoint
                 if (!empty($parameter)) {
                     $entityBody = json_decode(file_get_contents('php://input'));
 
-                    if (is_numeric($parameter) &&
-                        (!empty($entityBody->name) &&
-                        !empty($entityBody->email) &&
-                        !empty($entityBody->password))) {
+                    if (is_numeric($parameter)) {
+                        if (!empty($entityBody->name) ||
+                            !empty($entityBody->email) ||
+                            !empty($entityBody->password)) {
 
-                        $user = new UserModel();
-                        $user->setName($entityBody->name);
-                        $user->setEmail($entityBody->email);
-                        $user->setPassword($entityBody->password);
-                        $user->setId($parameter);
+                            $oldUser = $userController->getByIdForUpdate($parameter);
 
-                        return $userController->update($user);
+                            $user = new UserModel();
+
+                            $user->setId($parameter);
+
+                            $user->setName(
+                                $entityBody->name ?
+                                $entityBody->name :
+                                $oldUser['name']
+                            );
+
+                            $user->setEmail(
+                                $entityBody->email ?
+                                $entityBody->email :
+                                $oldUser['email']
+                            );
+
+                            $user->setPassword(
+                                $entityBody->password ?
+                                $entityBody->password :
+                                $oldUser['password']
+                            );
+
+                            return $userController->update($user);
+                        }
+
+                        return [null, 400];
                     }
 
                     return [null, 400];

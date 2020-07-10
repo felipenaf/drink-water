@@ -105,4 +105,14 @@ class UserRepository
 			return [null, 200];
         }
     }
+
+    public function getByIdForUpdate($id)
+    {
+        $sql = 'SELECT * FROM user WHERE id = :id';
+
+        $stmt = $this->connection->prepare($sql);
+	    $stmt->bindValue(":id", $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

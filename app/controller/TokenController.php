@@ -39,12 +39,12 @@ class TokenController
         //Token
         $token = $header . '.' . $payload . '.' . $sign;
 
-        return $this->save($token);
+        return $this->save($userId, $token);
     }
 
-    private function save($token)
+    private function save($userId, $token)
     {
-        return $this->tokenRepository->save($token);
+        return $this->tokenRepository->save($userId, $token);
     }
 
     public function verify()

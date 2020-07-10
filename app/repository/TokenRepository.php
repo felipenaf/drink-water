@@ -20,10 +20,11 @@ class TokenRepository
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function save($token)
+    public function save($userId, $token)
     {
-        $sql = 'INSERT INTO token (value) VALUES (:value)';
+        $sql = 'INSERT INTO token (id_user, value) VALUES (:id_user, :value)';
         $stmt = $this->connection->prepare($sql);
+	    $stmt->bindValue(':id_user', $userId);
 	    $stmt->bindValue(':value', $token);
 	    $stmt->execute();
 

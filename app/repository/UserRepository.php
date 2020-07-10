@@ -14,9 +14,20 @@ class UserRepository
     {
         $sql = 'SELECT u.id, u.name, u.email, d.milliliter FROM user u ';
         $sql .= 'LEFT JOIN drink d ON d.id_user = u.id ';
-
         $stmt = $this->connection->query($sql);
-        return [$stmt->fetchAll(PDO::FETCH_ASSOC), 200];
+
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($result)) {
+            return [null, 204];
+        }
+
+        $tokenController = new TokenController();
+        if ($tokenController->verify()) {
+            return [$result, 200];
+        }
+
+        return [null, 401];
     }
 
     public function getById($id)
@@ -36,7 +47,6 @@ class UserRepository
 
         $tokenController = new TokenController();
         if ($tokenController->verify()) {
-            unset($result['token']);
             return [$result, 200];
         }
 

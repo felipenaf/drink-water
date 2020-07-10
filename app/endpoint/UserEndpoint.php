@@ -37,9 +37,11 @@ class UserEndpoint
 
                         return $userController->save($user);
                     }
+
+                    return [null, 400];
                 }
 
-                return null;
+                return [null, 404];
             break;
 
             case 'PUT':

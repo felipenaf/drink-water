@@ -14,12 +14,12 @@ class UserEndpoint
                         return $userController->getById($parameter);
                     }
 
-                    return null;
+                    return [null, 400];
                 } else {
                     return $userController->getAll();
                 }
 
-                return null;
+                return [null, 404];
             break;
 
             case 'POST':

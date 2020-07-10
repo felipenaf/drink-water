@@ -24,22 +24,13 @@ class AuthRepository
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($result) {
-            $token = Token::generate($result['id'], $result['email']);
-            $this->insertToken($token, $result['id']);
+            $tokenController = new TokenController();
+            $token = $tokenController->generate($result['id'], $result['email']);
             $result['token'] = $token;
 
             return [$result, 200];
         }
 
         return [null, 401];
-    }
-
-    private function insertToken($token, $idUser)
-    {
-        $sql = 'UPDATE user SET token = :token WHERE id = :id';
-        $stmt = $this->connection->prepare($sql);
-	    $stmt->bindValue(':token', $token);
-	    $stmt->bindValue(':id', $idUser);
-	    $stmt->execute();
     }
 }

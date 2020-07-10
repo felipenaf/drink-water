@@ -1,8 +1,15 @@
 <?php
 
-class Token
+class TokenController
 {
-    public static function generate($userId, $userEmail)
+    private $tokenRepository;
+
+    public function __construct()
+    {
+        $this->tokenRepository = new TokenRepository();
+    }
+
+    public function generate($userId, $userEmail)
     {
         $key = '';
 
@@ -32,12 +39,24 @@ class Token
         //Token
         $token = $header . '.' . $payload . '.' . $sign;
 
-        return $token;
+        return $this->save($token);
     }
 
-    public static function verify($header)
+    private function save($token)
+    {
+        return $this->tokenRepository->save($token);
+    }
+
+    public function verify()
     {
         $headers = apache_request_headers();
-        return in_array("Bearer " . $header, $headers);
+
+        if (!isset($headers['Authorization'])) {
+            return false;
+        }
+
+        $token = str_replace('Bearer ', '', $headers['Authorization']);
+
+        return $this->tokenRepository->getByValue($token);
     }
 }

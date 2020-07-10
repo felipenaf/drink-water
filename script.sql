@@ -21,3 +21,9 @@ CREATE TABLE `drink_water`.`drink` (
   KEY `id_user` (`id_user`),
   CONSTRAINT `drink_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `token` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `value` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8

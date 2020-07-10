@@ -30,7 +30,11 @@ class UserEndpoint
                         !empty($entityBody->email) &&
                         !empty($entityBody->password)) {
 
-                        $user = new UserModel($entityBody->name, $entityBody->email, $entityBody->password);
+                        $user = new UserModel();
+                        $user->setName($entityBody->name);
+                        $user->setEmail($entityBody->email);
+                        $user->setPassword($entityBody->password);
+
                         return $userController->save($user);
                     }
                 }

@@ -19,15 +19,12 @@ class Route
         switch ($this->uri[0]) {
             case 'users':
                 return UserEndpoint::getResponse($this->uri, $method);
-
                 break;
             case 'login':
-                $loginController = new LoginController();
-
+                return AuthEndpoint::getResponse($this->uri, $method);
                 break;
             default:
-                http_response_code(404);
-                die();
+                return ['', 404];
                 break;
         }
     }

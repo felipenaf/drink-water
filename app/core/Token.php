@@ -34,4 +34,10 @@ class Token
 
         return $token;
     }
+
+    public static function verify($header)
+    {
+        $headers = apache_request_headers();
+        return in_array("Bearer " . $header, $headers);
+    }
 }

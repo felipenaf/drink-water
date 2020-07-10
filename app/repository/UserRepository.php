@@ -23,8 +23,13 @@ class UserRepository
         $stmt = $this->connection->prepare($sql);
 	    $stmt->bindValue(":id", $id);
         $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        if (Token::verify($result['token'])) {
+            return $result;
+        }
+
+        return null;
     }
 
     public function save(UserModel $user)

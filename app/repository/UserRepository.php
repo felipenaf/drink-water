@@ -42,10 +42,9 @@ class UserRepository
 	    $stmt->execute();
 
 	    if ($stmt->rowCount() > 0) {
-            $lastId = $this->connection->lastInsertId();
-			return $this->getById($lastId);
+			return [null, 200];
         }
 
-        return null;
+        return [null, 500];
     }
 }

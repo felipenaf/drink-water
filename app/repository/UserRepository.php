@@ -45,6 +45,10 @@ class UserRepository
 
     public function save(UserModel $user)
     {
+        if ($this->getByEmail($user->getEmail())) {
+            return ["Email ja existente, tente outro", 409];
+        }
+
         $sql = 'INSERT INTO user (name, email, password) VALUES (:name, :email, :password)';
         $stmt = $this->connection->prepare($sql);
 	    $stmt->bindValue(':name', $user->getName());
@@ -57,5 +61,15 @@ class UserRepository
         }
 
         return [null, 500];
+    }
+
+    private function getByEmail($email)
+    {
+        $sql = 'SELECT * FROM user WHERE email = :email';
+
+        $stmt = $this->connection->prepare($sql);
+	    $stmt->bindValue(":email", $email);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

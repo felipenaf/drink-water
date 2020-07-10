@@ -8,7 +8,7 @@ $response = $route->redirect($_SERVER['REQUEST_METHOD']);
 if ($response[0]) {
     echo json_encode([
         'status' => $response[1],
-        'data' => $response[0] ? $response[0] : ''
+        'data' => $response[0]
     ]);
 }
 

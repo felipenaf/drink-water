@@ -12,7 +12,10 @@ class AuthRepository
 
     public function login(UserModel $user)
     {
-        $sql = 'SELECT * FROM user WHERE email = :email AND password = :password';
+        $sql = 'SELECT u.id, u.name, u.email, d.milliliter FROM user u ';
+        $sql .= 'LEFT JOIN drink d ON d.id_user = u.id ';
+        $sql .= 'WHERE u.email = :email AND u.password = :password';
+
         $stmt = $this->connection->prepare($sql);
 	    $stmt->bindValue(":email", $user->getEmail());
 	    $stmt->bindValue(":password", $user->getPassword());
@@ -23,13 +26,12 @@ class AuthRepository
         if ($result) {
             $token = Token::generate($result['id'], $result['email']);
             $this->insertToken($token, $result['id']);
-            unset($result['password']);
             $result['token'] = $token;
 
-            return $result;
+            return [$result, 200];
         }
 
-        return http_response_code(401);
+        return [null, 401];
     }
 
     private function insertToken($token, $idUser)

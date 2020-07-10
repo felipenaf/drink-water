@@ -16,7 +16,7 @@ class UserRepository
         $sql .= 'LEFT JOIN drink d ON d.id_user = u.id ';
 
         $stmt = $this->connection->query($sql);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return [$stmt->fetchAll(PDO::FETCH_ASSOC), 200];
     }
 
     public function getById($id)

@@ -60,19 +60,19 @@ class UserEndpoint
                             $user->setId($parameter);
 
                             $user->setName(
-                                $entityBody->name ?
+                                !empty($entityBody->name) ?
                                 $entityBody->name :
                                 $oldUser['name']
                             );
 
                             $user->setEmail(
-                                $entityBody->email ?
+                                !empty($entityBody->email) ?
                                 $entityBody->email :
                                 $oldUser['email']
                             );
 
                             $user->setPassword(
-                                $entityBody->password ?
+                                !empty($entityBody->password) ?
                                 $entityBody->password :
                                 $oldUser['password']
                             );

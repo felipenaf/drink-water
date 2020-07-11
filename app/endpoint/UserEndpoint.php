@@ -5,6 +5,7 @@ class UserEndpoint
     public static function getResponse($uri, $method)
     {
         $parameter = isset($uri[1]) ? $uri[1] : '';
+        $secondParameter = isset($uri[2]) ? $uri[2] : '';
         $userController = new UserController();
 
         switch ($method) {
@@ -23,22 +24,31 @@ class UserEndpoint
             break;
 
             case 'POST':
-                if (empty($parameter)) {
-                    $entityBody = json_decode(file_get_contents('php://input'));
+                $entityBody = json_decode(file_get_contents('php://input'));
 
-                    if (!empty($entityBody->name) &&
-                        !empty($entityBody->email) &&
-                        !empty($entityBody->password)) {
+                if (empty($secondParameter)) {
+                    if (empty($parameter)) {
 
-                        $user = new UserModel();
-                        $user->setName($entityBody->name);
-                        $user->setEmail($entityBody->email);
-                        $user->setPassword($entityBody->password);
+                        if (!empty($entityBody->name) &&
+                            !empty($entityBody->email) &&
+                            !empty($entityBody->password)) {
 
-                        return $userController->save($user);
+                            $user = new UserModel();
+                            $user->setName($entityBody->name);
+                            $user->setEmail($entityBody->email);
+                            $user->setPassword($entityBody->password);
+
+                            return $userController->save($user);
+                        }
+
+                        return [null, 400];
+                    }
+                } else {
+                    if (is_numeric($parameter) && $secondParameter == 'drink') {
+                        return $userController->drink($parameter, $entityBody->drink_ml);
                     }
 
-                    return [null, 400];
+                    return [null, 404];
                 }
 
                 return [null, 404];

@@ -38,4 +38,9 @@ class UserController
     {
         return $this->userRepository->delete($id);
     }
+
+    public function drink($id, $drinkMl)
+    {
+        return $this->userRepository->drink($id, $drinkMl);
+    }
 }

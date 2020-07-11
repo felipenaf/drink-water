@@ -135,4 +135,38 @@ class UserRepository
 			return [null, 200];
         }
     }
+
+    public function drink($id, $drinkMl)
+    {
+        $tokenController = new TokenController();
+        $token = $tokenController->verify();
+
+        if ($token['id_user'] != $id) {
+            return [null, 401];
+        }
+
+        $sql = 'INSERT INTO drink (id_user, milliliter) VALUES (:id_user, :milliliter)';
+        $stmt = $this->connection->prepare($sql);
+	    $stmt->bindValue(':id_user', $id);
+	    $stmt->bindValue(':milliliter', $drinkMl);
+	    $stmt->execute();
+
+	    if ($stmt->rowCount() > 0) {
+            $drinks = $this->countDrink($id);
+            $result = $drinks[0];
+            $result['drink_counter'] = count($drinks);
+			return [$result, 200];
+        }
+
+        return [null, 500];
+    }
+
+    private function countDrink($id)
+    {
+        $sql = 'SELECT u.id, u.name, u.email FROM user u left join drink d on d.id_user = u.id WHERE id_user = :id_user';
+        $stmt = $this->connection->prepare($sql);
+	    $stmt->bindValue(":id_user", $id);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

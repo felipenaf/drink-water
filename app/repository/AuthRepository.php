@@ -31,6 +31,6 @@ class AuthRepository
             return [$result, 200];
         }
 
-        return [null, 401];
+        return ['Usuário não existe ou a senha está inválida', 401];
     }
 }

@@ -56,7 +56,7 @@ class UserRepository
     public function save(UserModel $user)
     {
         if ($this->getByEmail($user->getEmail())) {
-            return ["Email ja existente, tente outro", 409];
+            return ["Usuário já existe", 409];
         }
 
         $sql = 'INSERT INTO user (name, email, password) VALUES (:name, :email, :password)';

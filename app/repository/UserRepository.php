@@ -115,4 +115,24 @@ class UserRepository
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function delete($id)
+    {
+        $tokenController = new TokenController();
+        $token = $tokenController->verify();
+
+        if ($token['id_user'] != $id) {
+            return [null, 401];
+        }
+
+        $tokenController->deleteByIdUser($id);
+
+        $sql = 'DELETE FROM user WHERE id = :id';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute(['id' => $id]);
+
+        if ($stmt->rowCount()) {
+			return [null, 200];
+        }
+    }
 }

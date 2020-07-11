@@ -33,4 +33,9 @@ class UserController
     {
         return $this->userRepository->getByIdForUpdate($id);
     }
+
+    public function delete(int $id)
+    {
+        return $this->userRepository->delete($id);
+    }
 }

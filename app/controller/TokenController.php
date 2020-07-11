@@ -59,4 +59,9 @@ class TokenController
 
         return $this->tokenRepository->getByValue($token);
     }
+
+    public function deleteByIdUser($id)
+    {
+        return $this->tokenRepository->deleteByIdUser($id);
+    }
 }

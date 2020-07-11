@@ -32,4 +32,17 @@ class TokenRepository
 			return $token;
         }
     }
+
+    public function deleteByIdUser($id)
+    {
+        $sql = 'DELETE FROM token WHERE id_user = :id_user';
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute(['id_user' => $id]);
+
+        if ($stmt->rowCount() > 0) {
+			return true;
+        }
+
+        return false;
+    }
 }

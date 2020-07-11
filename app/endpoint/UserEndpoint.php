@@ -88,14 +88,18 @@ class UserEndpoint
 
                 return [null, 404];
             break;
+
             case 'DELETE':
-                # When the method is DELETE, excludes an existing client.
-                return self::doDelete($route);
-                break;
+                if (!empty($parameter) && is_numeric($parameter)) {
+                    return $userController->delete($parameter);
+                }
+
+                return [null, 404];
+            break;
+
             default:
-                # When the method is different of the previous methods, return an error message.
-                return array('status' => 405);
-                  break;
+                return [null, 405];
+            break;
         }
     }
 }
